@@ -12,7 +12,7 @@ services:
       # If you want to edit files on your host
       # change this to ./code:/storage, it will be
       # slower though as bind mounts suck.
-      - ./code:/storage
+      - /home/ronak/development/:/storage
     depends_on:
       - dind
       - redis
@@ -26,7 +26,7 @@ services:
       # If you want to edit files on your host
       # change this to ./code:/storage, it will be
       # slower though as bind mounts suck.
-      - ./code:/storage
+      - /home/ronak/development/:/storage
       - docker:/var/lib/docker
     privileged: true
     # May need to change this depending on the output

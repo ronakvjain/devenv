@@ -70,21 +70,7 @@ RUN mkdir -p /storage
 WORKDIR /storage
 RUN chown docker:docker /storage
 
-# These modules are required when compiling npm modules that talk to oracle
-ENV DL_HOST=http://ftp.riken.jp/Linux/cern/centos/7/cernonly/x86_64/Packages/
-ENV BASE_ORACLE_VERSION=12.2
-ENV ORACLE_VERSION=$BASE_ORACLE_VERSION.0.1.0-1
-RUN cd /tmp && \
-    wget -q $DL_HOST/oracle-instantclient$BASE_ORACLE_VERSION-basic-$ORACLE_VERSION.x86_64.rpm && \
-    rpm -ivh oracle-instantclient$BASE_ORACLE_VERSION-basic-$ORACLE_VERSION.x86_64.rpm && \
-    rm -f oracle-instantclient$BASE_ORACLE_VERSION-basic-$ORACLE_VERSION.x86_64.rpm
-
-RUN cd /tmp && \
-    wget -q $DL_HOST/oracle-instantclient$BASE_ORACLE_VERSION-devel-$ORACLE_VERSION.x86_64.rpm && \
-    rpm -ivh oracle-instantclient$BASE_ORACLE_VERSION-devel-$ORACLE_VERSION.x86_64.rpm && \
-    rm -f oracle-instantclient$BASE_ORACLE_VERSION-devel-$ORACLE_VERSION.x86_64.rpm
-
-RUN pip3 install thefuck
+RUN pip3.4 install thefuck
 
 USER docker
 ENV HOME=/home/docker
@@ -129,11 +115,11 @@ RUN mkdir -p $HOME/.vim/vim-addons && \
 		git clone --depth=1 https://github.com/goatslacker/mango.vim && \
 		git clone --depth=1 https://bitbucket.org/vimcommunity/vim-pi
 
-# Compile YouCompleteMe
-RUN cd $HOME/.vim/vim-addons/YouCompleteMe && \
-    git config core.sparsecheckout true && \
-   	git submodule update --init --recursive && \
-		./install.sh
+## Compile YouCompleteMe
+#RUN cd $HOME/.vim/vim-addons/YouCompleteMe && \
+#    git config core.sparsecheckout true && \
+#   	git submodule update --init --recursive && \
+#		./install.sh
 
 # RVM
 ENV RVM_DIR=/usr/local/rvm
@@ -182,15 +168,15 @@ RUN cd /usr/local/bin && \
     sudo ln -s /usr/local/bin/docker-compose /bin/docker-compose
 
 # Setup GCloud CLI
-ARG DEVENV_GCLOUD_VERSION
-ENV CLOUDSDK_INSTALL_DIR /usr/lib64/google-cloud-sdk
-ENV CLOUD_SDK_REPO cloud-sdk-trusty
-ENV CLOUDSDK_PYTHON_SITEPACKAGES 1
-COPY gcloud.repo /etc/yum.repos.d/
-RUN sudo yum -y -q update && \
-    sudo yum -y -q install google-cloud-sdk-$DEVENV_GCLOUD_VERSION* && \
-    sudo yum -y -q clean all
-RUN sudo mkdir -p /etc/gcloud/keys
+#ARG DEVENV_GCLOUD_VERSION
+#ENV CLOUDSDK_INSTALL_DIR /usr/lib64/google-cloud-sdk
+#ENV CLOUD_SDK_REPO cloud-sdk-trusty
+#ENV CLOUDSDK_PYTHON_SITEPACKAGES 1
+#COPY gcloud.repo /etc/yum.repos.d/
+#RUN sudo yum -y -q update && \
+#    sudo yum -y -q install google-cloud-sdk-$DEVENV_GCLOUD_VERSION* && \
+#    sudo yum -y -q clean all
+#RUN sudo mkdir -p /etc/gcloud/keys
 
 # Setup Kubernetes CLI
 ARG DEVENV_KUBECTL_VERSION
@@ -199,9 +185,10 @@ RUN cd /usr/local/bin && \
     sudo chmod +x kubectl
 
 # Disable google cloud auto update... we should be pushing a new agent container
-RUN sudo gcloud config set --installation component_manager/disable_update_check true && \
-    gcloud config set component_manager/disable_update_check true && \
-    gcloud config set core/disable_usage_reporting true
+#RUN sudo gcloud config set --installation component_manager/disable_update_check true && \
+#    gcloud config set component_manager/disable_update_check true && \
+#    gcloud config set core/disable_usage_reporting true
+
 
 # Add Ruby and RVM
 ARG DEVENV_RUBY_VERSION

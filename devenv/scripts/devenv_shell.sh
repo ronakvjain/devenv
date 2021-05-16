@@ -106,4 +106,4 @@ if [ $? -eq 0 ] && declare -f __git_ps1 > /dev/null; then \
   fi)"; \
 fi)'$BBlack]$Color_Off' \w\n\$ '
 
-eval $(thefuck --alias)
+#eval $(thefuck --alias)
