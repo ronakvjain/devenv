@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
   devenv:
-    image: stono/devenv
+    image: ronakvjain/devenv
     network_mode: 'service:dind'
     volumes:
       - home:/home/docker
@@ -12,10 +12,9 @@ services:
       # If you want to edit files on your host
       # change this to ./code:/storage, it will be
       # slower though as bind mounts suck.
-      - /home/ronak/development/:/storage
+      - ~/development/:/storage
     depends_on:
       - dind
-      - redis
     environment:
       - DOCKER_HOST=tcp://127.0.0.1:2375
 
@@ -26,26 +25,19 @@ services:
       # If you want to edit files on your host
       # change this to ./code:/storage, it will be
       # slower though as bind mounts suck.
-      - /home/ronak/development/:/storage
+      - ~/development/:/storage
       - docker:/var/lib/docker
     privileged: true
     # May need to change this depending on the output
     # of docker info | grep -i "storage driver"
     command: --storage-driver=overlay
     ports:
-      - 6379:6379   # Redis
       # Apps
       - 5000:5000
       - 9000:9000
       - 9001:9001
       - 9002:9002
       - 9003:9003
-
-  # Examples of services exposed on the devenv localhost
-  redis:
-    image: redis:4.0.1
-    network_mode: 'service:dind'
-    restart: always
 
 volumes:
   code:
